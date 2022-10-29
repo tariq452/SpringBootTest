@@ -1,7 +1,7 @@
 package com.ttami.propertymanagment.service;
 
 import com.ttami.propertymanagment.dto.PropertyDTO;
-import com.ttami.propertymanagment.repository.PropertyRepository;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 

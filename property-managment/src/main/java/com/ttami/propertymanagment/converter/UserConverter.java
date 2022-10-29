@@ -1,9 +1,9 @@
 package com.ttami.propertymanagment.converter;
 
 
-import com.ttami.propertymanagment.dto.PropertyDTO;
+
 import com.ttami.propertymanagment.dto.UserTDO;
-import com.ttami.propertymanagment.entity.PropertyEntity;
+
 import com.ttami.propertymanagment.entity.UserEntity;
 import org.springframework.stereotype.Component;
 
