@@ -23,9 +23,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserTDO register(UserTDO userTDO) {
         UserEntity userEntity= userConverter.covertDTOtoEntity(userTDO);
-        userRepository.save(userEntity);
-        userTDO=userConverter.convertEntityToTDO(userEntity);
-        return userTDO;
+        Optional<UserEntity> optionalUserEntity=userRepository.findByOwnerEmail(userTDO.getOwnerEmail());
+        if (optionalUserEntity.isEmpty()){
+            userRepository.save(userEntity);
+            userTDO=userConverter.convertEntityToTDO(userEntity);
+            return userTDO;
+        }else {
+            List<ErrorModel> errorModels = new ArrayList<>();
+            ErrorModel errorModel = new ErrorModel();
+            errorModel.setCode("INVALID_REGISTER");
+            errorModel.setMessage("The Email already exist");
+            errorModels.add(errorModel);
+            throw new BusinessException(errorModels);
+        }
+
+
+
+
     }
 
     @Override
