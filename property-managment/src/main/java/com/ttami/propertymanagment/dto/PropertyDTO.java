@@ -12,6 +12,7 @@ public class PropertyDTO {
     private String ownerEmail;
     private Double proce;
     private String address;
+    private Long userID;
 
 
 }

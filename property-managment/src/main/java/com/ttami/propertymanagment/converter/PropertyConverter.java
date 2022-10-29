@@ -18,6 +18,7 @@ public class PropertyConverter {
         pe.setOwnerEmail(propertyDTO.getOwnerEmail());
         pe.setProce(propertyDTO.getProce());
 
+
         return pe;
     }
 

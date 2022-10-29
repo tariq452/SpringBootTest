@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+
 @RequestMapping("/api/v1/properties")
 public class PropertyController {
 @Value("${pms.dummy}")
@@ -40,6 +41,15 @@ private String dummy;
 
 
   }
+
+    @GetMapping("/properties/user/{userId}")
+    public ResponseEntity<List<PropertyDTO>> getAllPropertiesForUser(@PathVariable ("userId") Long userId){
+
+        List<PropertyDTO> propertyDTOList= propertyService.getAllPropertiesForUser(userId);
+        return new ResponseEntity<>(propertyDTOList,HttpStatus.OK);
+
+
+    }
 @PutMapping("/properties/{propertyId}")
   public ResponseEntity<PropertyDTO> updateProperty(@RequestBody PropertyDTO propertyDTO,@PathVariable Long propertyId){
     propertyDTO=propertyService.updateProperty(propertyDTO,propertyId);
