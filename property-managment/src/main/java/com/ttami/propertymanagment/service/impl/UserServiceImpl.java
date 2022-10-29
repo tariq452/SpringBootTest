@@ -7,6 +7,8 @@ import com.ttami.propertymanagment.exception.BusinessException;
 import com.ttami.propertymanagment.exception.ErrorModel;
 import com.ttami.propertymanagment.repository.UserRepository;
 import com.ttami.propertymanagment.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -29,12 +33,15 @@ public class UserServiceImpl implements UserService {
             userTDO=userConverter.convertEntityToTDO(userEntity);
             return userTDO;
         }else {
+
             List<ErrorModel> errorModels = new ArrayList<>();
             ErrorModel errorModel = new ErrorModel();
             errorModel.setCode("INVALID_REGISTER");
             errorModel.setMessage("The Email already exist");
             errorModels.add(errorModel);
+            logger.error("Inside filed validation: {} - {} ",errorModel.getCode(),errorModel.getMessage());
             throw new BusinessException(errorModels);
+
         }
 
 
