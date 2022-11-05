@@ -8,6 +8,7 @@ import com.ttami.propertymanagment.entity.PropertyEntity;
 import com.ttami.propertymanagment.entity.UserEntity;
 import com.ttami.propertymanagment.exception.BusinessException;
 import com.ttami.propertymanagment.exception.ErrorModel;
+import com.ttami.propertymanagment.repository.AddressReposoitory;
 import com.ttami.propertymanagment.repository.PropertyRepository;
 import com.ttami.propertymanagment.repository.UserRepository;
 import com.ttami.propertymanagment.service.PropertyService;
@@ -27,10 +28,12 @@ public class PropertyServiceImpl implements PropertyService {
     private PropertyConverter propertyConverter;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private AddressReposoitory addressReposoitory;
     @Override
     public PropertyDTO saveProperty(PropertyDTO propertyDTO) {
 
-        Optional<UserEntity>  optionalUserEntity = userRepository.findById(propertyDTO.getUserID());
+        Optional<UserEntity>  optionalUserEntity = userRepository.findById(propertyDTO.getUserId());
         if(optionalUserEntity.isPresent()){
             PropertyEntity pe = propertyConverter.covertDTOtoEntity(propertyDTO);
             pe.setUserEntity(optionalUserEntity.get());
@@ -77,9 +80,21 @@ public class PropertyServiceImpl implements PropertyService {
             propList.add(dto);
 
         }
+        if (propList.isEmpty()){
+            List<ErrorModel> errorModels = new ArrayList<>();
+            ErrorModel errorModel = new ErrorModel();
+            errorModel.setCode("NOT_EXIST");
+            errorModel.setMessage("not exist");
+            errorModels.add(errorModel);
+
+            throw new BusinessException(errorModels);
+
+        }else {
+            return propList;
+        }
 
 
-        return propList;
+
     }
 
 

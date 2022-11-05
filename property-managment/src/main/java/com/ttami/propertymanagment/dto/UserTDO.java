@@ -19,8 +19,13 @@ public class UserTDO {
     @NotNull(message = "owner Email is mandatory ")
     @Size(min = 1,max = 50,message = "owner Email should be between 1 to 50")
     private String ownerEmail;
-
     private String phone;
     @NotNull(message = "the password is mandatory")
     private String password;
+
+    private String houseNo;
+    private String Street;
+    private String city;
+    private String postalCode;
+    private String country;
 }

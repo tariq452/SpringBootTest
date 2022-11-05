@@ -2,9 +2,11 @@ package com.ttami.propertymanagment.service.impl;
 
 import com.ttami.propertymanagment.converter.UserConverter;
 import com.ttami.propertymanagment.dto.UserTDO;
+import com.ttami.propertymanagment.entity.AddressEntity;
 import com.ttami.propertymanagment.entity.UserEntity;
 import com.ttami.propertymanagment.exception.BusinessException;
 import com.ttami.propertymanagment.exception.ErrorModel;
+import com.ttami.propertymanagment.repository.AddressReposoitory;
 import com.ttami.propertymanagment.repository.UserRepository;
 import com.ttami.propertymanagment.service.UserService;
 import org.slf4j.Logger;
@@ -23,14 +25,25 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private AddressReposoitory addressReposoitory;
+    @Autowired
     private UserConverter userConverter;
     @Override
     public UserTDO register(UserTDO userTDO) {
+        AddressEntity addressEntity = new AddressEntity();
+        addressEntity.setCity(userTDO.getCity());
+        addressEntity.setStreet(userTDO.getStreet());
+        addressEntity.setCountry(userTDO.getCountry());
+        addressEntity.setHouseNo(userTDO.getHouseNo());
+        addressEntity.setPostalCode(userTDO.getPostalCode());
         UserEntity userEntity= userConverter.covertDTOtoEntity(userTDO);
+        addressEntity.setUserEntity(userEntity);
+
         Optional<UserEntity> optionalUserEntity=userRepository.findByOwnerEmail(userTDO.getOwnerEmail());
         if (optionalUserEntity.isEmpty()){
             userRepository.save(userEntity);
             userTDO=userConverter.convertEntityToTDO(userEntity);
+            addressReposoitory.save(addressEntity);
             return userTDO;
         }else {
 

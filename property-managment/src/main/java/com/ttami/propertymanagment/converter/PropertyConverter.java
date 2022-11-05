@@ -32,6 +32,7 @@ public class PropertyConverter {
         propertyDTO.setOwnerEmail(propertyEntity.getOwnerEmail());
         propertyDTO.setProce(propertyEntity.getProce());
         propertyDTO.setAddress(propertyEntity.getAddress());
+        propertyDTO.setUserId(propertyEntity.getUserEntity().getId());
 
 
 
