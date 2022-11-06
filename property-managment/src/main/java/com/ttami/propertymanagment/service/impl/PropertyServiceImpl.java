@@ -12,6 +12,7 @@ import com.ttami.propertymanagment.repository.AddressReposoitory;
 import com.ttami.propertymanagment.repository.PropertyRepository;
 import com.ttami.propertymanagment.repository.UserRepository;
 import com.ttami.propertymanagment.service.PropertyService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,17 +31,22 @@ public class PropertyServiceImpl implements PropertyService {
     private UserRepository userRepository;
     @Autowired
     private AddressReposoitory addressReposoitory;
+
+    @Autowired
+    private ModelMapper modelMapper;
     @Override
     public PropertyDTO saveProperty(PropertyDTO propertyDTO) {
 
         Optional<UserEntity>  optionalUserEntity = userRepository.findById(propertyDTO.getUserId());
         if(optionalUserEntity.isPresent()){
-            PropertyEntity pe = propertyConverter.covertDTOtoEntity(propertyDTO);
+
+            //PropertyEntity pe = propertyConverter.covertDTOtoEntity(propertyDTO);
+            PropertyEntity pe = modelMapper.map(propertyDTO,PropertyEntity.class);
+
             pe.setUserEntity(optionalUserEntity.get());
             pe = propertyRepository.save(pe);
-            propertyDTO=propertyConverter.convertEntityToTDO(pe);
-
-
+            //propertyDTO=propertyConverter.convertEntityToTDO(pe);
+            PropertyDTO dto= modelMapper.map(pe,PropertyDTO.class);
             return propertyDTO;
         }else {
             List<ErrorModel> errorModels = new ArrayList<>();
@@ -48,7 +54,6 @@ public class PropertyServiceImpl implements PropertyService {
             errorModel.setCode("USER_ID_NOT_EXIST");
             errorModel.setMessage(" user dose not exist");
             errorModels.add(errorModel);
-
             throw new BusinessException(errorModels);
         }
 
@@ -59,14 +64,10 @@ public class PropertyServiceImpl implements PropertyService {
 
         List<PropertyEntity> listOfProperties =(List<PropertyEntity>)propertyRepository.findAll();
         List<PropertyDTO> propList = new ArrayList<>();
-
       for( PropertyEntity pe: listOfProperties){
-           PropertyDTO dto=propertyConverter.convertEntityToTDO(pe);
+          PropertyDTO dto= modelMapper.map(pe,PropertyDTO.class);
             propList.add(dto);
-
        }
-        
-
         return propList;
     }
 
@@ -76,7 +77,8 @@ public class PropertyServiceImpl implements PropertyService {
         List<PropertyDTO> propList = new ArrayList<>();
 
         for( PropertyEntity pe: listOfProperties){
-            PropertyDTO dto=propertyConverter.convertEntityToTDO(pe);
+           // PropertyDTO dto=propertyConverter.convertEntityToTDO(pe);
+            PropertyDTO dto= modelMapper.map(pe,PropertyDTO.class);
             propList.add(dto);
 
         }
@@ -93,8 +95,6 @@ public class PropertyServiceImpl implements PropertyService {
             return propList;
         }
 
-
-
     }
 
 
@@ -110,7 +110,8 @@ public class PropertyServiceImpl implements PropertyService {
             pe.setOwnerName(propertyDTO.getOwnerName());
             pe.setOwnerEmail(propertyDTO.getOwnerEmail());
             pe.setProce(propertyDTO.getProce());
-            dto= propertyConverter.convertEntityToTDO(pe);
+           // dto= propertyConverter.convertEntityToTDO(pe);
+            dto= modelMapper.map(pe,PropertyDTO.class);
             propertyRepository.save(pe);
         }
         return dto;
@@ -123,7 +124,8 @@ public class PropertyServiceImpl implements PropertyService {
         if (optionalPropertyEntity.isPresent()){
             PropertyEntity pe= optionalPropertyEntity.get();
             pe.setDescription(propertyDTO.getDescription());
-            dto= propertyConverter.convertEntityToTDO(pe);
+            //dto= propertyConverter.convertEntityToTDO(pe);
+            dto= modelMapper.map(pe,PropertyDTO.class);
             propertyRepository.save(pe);
         }
         return dto;
@@ -136,7 +138,8 @@ public class PropertyServiceImpl implements PropertyService {
         if (optionalPropertyEntity.isPresent()){
             PropertyEntity pe= optionalPropertyEntity.get();
             pe.setProce(propertyDTO.getProce());
-            dto= propertyConverter.convertEntityToTDO(pe);
+            //dto= propertyConverter.convertEntityToTDO(pe);
+            dto= modelMapper.map(pe,PropertyDTO.class);
             propertyRepository.save(pe);
         }
         return dto;
