@@ -68,6 +68,7 @@ public class PropertyServiceImpl implements PropertyService {
           PropertyDTO dto= modelMapper.map(pe,PropertyDTO.class);
             propList.add(dto);
        }
+
         return propList;
     }
 

@@ -3,6 +3,7 @@ package com.ttami.propertymanagment.service.impl;
 import com.ttami.propertymanagment.converter.UserConverter;
 import com.ttami.propertymanagment.dto.UserTDO;
 import com.ttami.propertymanagment.entity.AddressEntity;
+import com.ttami.propertymanagment.entity.PropertyEntity;
 import com.ttami.propertymanagment.entity.UserEntity;
 import com.ttami.propertymanagment.exception.BusinessException;
 import com.ttami.propertymanagment.exception.ErrorModel;
@@ -29,7 +30,8 @@ public class UserServiceImpl implements UserService {
     private AddressReposoitory addressReposoitory;
     @Autowired
     private UserConverter userConverter;
-
+    @Autowired
+    private ModelMapper modelMapper;
     @Override
     public UserTDO register(UserTDO userTDO) {
         AddressEntity addressEntity = new AddressEntity();
@@ -38,13 +40,16 @@ public class UserServiceImpl implements UserService {
         addressEntity.setCountry(userTDO.getCountry());
         addressEntity.setHouseNo(userTDO.getHouseNo());
         addressEntity.setPostalCode(userTDO.getPostalCode());
-        UserEntity userEntity= userConverter.covertDTOtoEntity(userTDO);
+        UserEntity userEntity= modelMapper.map(userTDO,UserEntity.class);
+
         addressEntity.setUserEntity(userEntity);
 
         Optional<UserEntity> optionalUserEntity=userRepository.findByOwnerEmail(userTDO.getOwnerEmail());
         if (optionalUserEntity.isEmpty()){
             userRepository.save(userEntity);
-            userTDO=userConverter.convertEntityToTDO(userEntity);
+            //userTDO=userConverter.convertEntityToTDO(userEntity);
+            userTDO=modelMapper.map(userEntity, UserTDO.class);
+
             addressReposoitory.save(addressEntity);
             return userTDO;
         }else {
@@ -66,7 +71,8 @@ public class UserServiceImpl implements UserService {
         UserTDO userTDO=null;
         Optional<UserEntity> optionalUserEntity=userRepository.findByOwnerEmailAndPassword(emaill,password);
         if(optionalUserEntity.isPresent()){
-           userTDO=userConverter.convertEntityToTDO(optionalUserEntity.get());
+           //userTDO=userConverter.convertEntityToTDO(optionalUserEntity);
+            userTDO= modelMapper.map(optionalUserEntity, UserTDO.class);
         }else{
             List<ErrorModel> errorModels = new ArrayList<>();
             ErrorModel errorModel = new ErrorModel();
