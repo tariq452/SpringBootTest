@@ -1,9 +1,9 @@
 package com.ttami.propertymanagment.service.impl;
 
-import com.ttami.propertymanagment.converter.UserConverter;
+
 import com.ttami.propertymanagment.dto.UserTDO;
 import com.ttami.propertymanagment.entity.AddressEntity;
-import com.ttami.propertymanagment.entity.PropertyEntity;
+
 import com.ttami.propertymanagment.entity.UserEntity;
 import com.ttami.propertymanagment.exception.BusinessException;
 import com.ttami.propertymanagment.exception.ErrorModel;
@@ -28,8 +28,8 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private AddressReposoitory addressReposoitory;
-    @Autowired
-    private UserConverter userConverter;
+
+
     @Autowired
     private ModelMapper modelMapper;
     @Override
@@ -47,9 +47,7 @@ public class UserServiceImpl implements UserService {
         Optional<UserEntity> optionalUserEntity=userRepository.findByOwnerEmail(userTDO.getOwnerEmail());
         if (optionalUserEntity.isEmpty()){
             userRepository.save(userEntity);
-            //userTDO=userConverter.convertEntityToTDO(userEntity);
             userTDO=modelMapper.map(userEntity, UserTDO.class);
-
             addressReposoitory.save(addressEntity);
             return userTDO;
         }else {

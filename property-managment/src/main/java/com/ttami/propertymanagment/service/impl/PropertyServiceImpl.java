@@ -1,7 +1,7 @@
 package com.ttami.propertymanagment.service.impl;
 
 
-import com.ttami.propertymanagment.converter.PropertyConverter;
+
 import com.ttami.propertymanagment.dto.PropertyDTO;
 
 import com.ttami.propertymanagment.entity.PropertyEntity;
@@ -25,8 +25,7 @@ public class PropertyServiceImpl implements PropertyService {
     @Autowired
     private PropertyRepository propertyRepository;
 
-    @Autowired
-    private PropertyConverter propertyConverter;
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -40,12 +39,12 @@ public class PropertyServiceImpl implements PropertyService {
         Optional<UserEntity>  optionalUserEntity = userRepository.findById(propertyDTO.getUserId());
         if(optionalUserEntity.isPresent()){
 
-            //PropertyEntity pe = propertyConverter.covertDTOtoEntity(propertyDTO);
+
             PropertyEntity pe = modelMapper.map(propertyDTO,PropertyEntity.class);
 
             pe.setUserEntity(optionalUserEntity.get());
             pe = propertyRepository.save(pe);
-            //propertyDTO=propertyConverter.convertEntityToTDO(pe);
+
             PropertyDTO dto= modelMapper.map(pe,PropertyDTO.class);
             return propertyDTO;
         }else {
@@ -78,7 +77,7 @@ public class PropertyServiceImpl implements PropertyService {
         List<PropertyDTO> propList = new ArrayList<>();
 
         for( PropertyEntity pe: listOfProperties){
-           // PropertyDTO dto=propertyConverter.convertEntityToTDO(pe);
+
             PropertyDTO dto= modelMapper.map(pe,PropertyDTO.class);
             propList.add(dto);
 
@@ -111,7 +110,7 @@ public class PropertyServiceImpl implements PropertyService {
             pe.setOwnerName(propertyDTO.getOwnerName());
             pe.setOwnerEmail(propertyDTO.getOwnerEmail());
             pe.setProce(propertyDTO.getProce());
-           // dto= propertyConverter.convertEntityToTDO(pe);
+
             dto= modelMapper.map(pe,PropertyDTO.class);
             propertyRepository.save(pe);
         }
@@ -125,7 +124,7 @@ public class PropertyServiceImpl implements PropertyService {
         if (optionalPropertyEntity.isPresent()){
             PropertyEntity pe= optionalPropertyEntity.get();
             pe.setDescription(propertyDTO.getDescription());
-            //dto= propertyConverter.convertEntityToTDO(pe);
+
             dto= modelMapper.map(pe,PropertyDTO.class);
             propertyRepository.save(pe);
         }
@@ -139,7 +138,7 @@ public class PropertyServiceImpl implements PropertyService {
         if (optionalPropertyEntity.isPresent()){
             PropertyEntity pe= optionalPropertyEntity.get();
             pe.setProce(propertyDTO.getProce());
-            //dto= propertyConverter.convertEntityToTDO(pe);
+
             dto= modelMapper.map(pe,PropertyDTO.class);
             propertyRepository.save(pe);
         }

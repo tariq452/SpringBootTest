@@ -2,6 +2,7 @@ package com.ttami.propertymanagment.controller;
 
 
 import com.ttami.propertymanagment.dto.UserTDO;
+import com.ttami.propertymanagment.response.ResponseHandler;
 import com.ttami.propertymanagment.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,10 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserTDO> registerUser(@Valid @RequestBody UserTDO userTDO){
+    public ResponseEntity<Object> registerUser(@Valid @RequestBody UserTDO userTDO){
         userTDO= userService.register(userTDO);
-        return new ResponseEntity<>(userTDO, HttpStatus.CREATED);
+        //return new ResponseEntity<>(userTDO, HttpStatus.CREATED);
+        return ResponseHandler.generateResponse("Successfully register!",HttpStatus.OK,userTDO);
 
     }
 
